@@ -4,22 +4,35 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"net/http"
+	"os"
 
 	"golang.org/x/sync/errgroup"
 )
 
 func main(){
+	if len(os.Args) !=2{
+		log.Printf("need port number\n")
+		os.Exit(1)
+
+
+	}
+	p := os.Args[1]
+	l,err:=net.Listen("tcp",":"+p)
+	if err != nil{
+		log.Fatalf("failed to listen port %s:%v",p,err)
+	}
+
 	//context.Background()は空のコンテキストを生成する。 
 	//コンテキストを使う事で関数の外部からサーバーのプロセスを中断できる
-	if err := run(context.Background());err != nil{
+	if err := run(context.Background(),l);err != nil{
 		log.Printf("failed  to terminate server:%v",err)
 	}
 }
 
-func run(ctx context.Context)error{
+func run(ctx context.Context,l net.Listener)error{
 	s := &http.Server{
-		Addr: ":18080",
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
 		fmt.Fprintf(w,"hello!:%s",r.URL.Path[1:])
 	}),
@@ -29,7 +42,7 @@ func run(ctx context.Context)error{
 	//errgroupは戻り値をエラーで返すことができる
 	//serverを起動しつつ、contextの終了通知を待機する
 	eg.Go(func() error{
-		if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed{
+		if err := s.Serve(l); err != nil && err != http.ErrServerClosed{
 		log.Printf("failed to close server:%v",err)
 		return err
 		}
