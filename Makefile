@@ -1,5 +1,5 @@
 .PHONY:  help build build-local up down logs ps test
-.DEFAULT_GOAL:= help
+.DEFAULT_GOAL := help
 
 DOCKER_TAG := latest
 build:
@@ -7,7 +7,7 @@ build:
 build-local:
 	docker compose build --no-cache
 up:
-	docker compose up
+	docker compose up -d
 down:
 	docker compose down
 logs:
