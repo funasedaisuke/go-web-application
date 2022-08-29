@@ -1,17 +1,23 @@
 package main
 
 import (
-	"config"
 	"context"
 	"fmt"
 	"log"
 	"net"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
+
+	"github.com/funasedaisuke/go-web-application/config"
 
 	"golang.org/x/sync/errgroup"
 )
 
 func main(){
+
 	// if len(os.Args) !=2{
 	// 	log.Printf("need port number\n")
 	// 	os.Exit(1)
@@ -22,12 +28,14 @@ func main(){
 
 	//context.Background()は空のコンテキストを生成する。 
 	//コンテキストを使う事で関数の外部からサーバーのプロセスを中断できる
-	if err := run(context.Background(),l);err != nil{
+	if err := run(context.Background());err != nil{
 		log.Printf("failed  to terminate server:%v",err)
 	}
 }
 
 func run(ctx context.Context)error{
+	ctx,stop := signal.NotifyContext(ctx,os.Interrupt,syscall.SIGTERM)
+	defer stop()
 	cfg,err := config.New()
 	if err != nil{
 		return err
@@ -42,6 +50,7 @@ func run(ctx context.Context)error{
 
 	s := &http.Server{
 		Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request){
+		time.Sleep(5 * time.Second)
 		fmt.Fprintf(w,"hello!:%s",r.URL.Path[1:])
 	}),
 	}
