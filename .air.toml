@@ -3,7 +3,7 @@ tmp_dir = "tmp"
 
 [build]
 
-cmd = "go build -0 ./tmp/main"
+cmd = "go build -o ./tmp/main ."
 
 bin = "tmp/main"
 
@@ -14,16 +14,16 @@ exclude_dir =["assets","tmp","vendor"]
 include_dir =[]
 exclude_file =[]
 exclude_regex = ["_test.go"]
-exclude_dir_unchanged = true
+exclude_unchanged = true
 follow_symlink = true
 log = "air.log"
-deploy =1000
+delay =1000
 stop_on_error =true
 send_interrupt = false
 kill_delay = 500
 
 [log]
-time = true
+time = false
 
 [color]
 main = "magenta"
