@@ -1,14 +1,15 @@
 package entity
+
 import "time"
 
 type TaskID int64
 type TaskStatus string
 
-const {
+const (
 	TaskStatusTodo TaskStatus = "todo"
 	TaskStatusDoing TaskStatus = "Doing"
 	TaskStatusDone TaskStatus = "Done"
-}
+)
 
 type Task struct{
 	ID TaskID `json:"id"`
