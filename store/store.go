@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	Tasks = &TaskStore{Tasks: map[int]*entity.Task{}}
+	Tasks = &TaskStore{Tasks: map[entity.TaskID]*entity.Task{}}
 	ErrorNotFound = errors.New("not found")
 )
 
@@ -25,7 +25,7 @@ func (ts *TaskStore) Add(t *entity.Task)(int,error){
 
 func  (ts *TaskStore) All()entity.Tasks{
 	tasks := make([]*entity.Task,len(ts.Tasks))
-	for i,t *= range ts.Tatasks{
+	for i,t := range ts.Tasks{
 		tasks[i-1]=t
 	}
 	return tasks
