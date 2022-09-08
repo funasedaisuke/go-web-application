@@ -1,12 +1,15 @@
 package handler
 
 import (
+	"bytes"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 
-    "github.com/funasedaisuke/go-web-application/store"
 	"github.com/funasedaisuke/go-web-application/entity"
+	"github.com/funasedaisuke/go-web-application/store"
 	"github.com/funasedaisuke/go-web-application/testutil"
+	"github.com/go-playground/validator/v10"
 )
 
 func TestAddTask(t *testing.T){
@@ -37,30 +40,30 @@ func TestAddTask(t *testing.T){
 
 	for n,tt := range tests{
 		tt := tt
-		t.Run(n,func(t *testing.T)){
+		t.Run(n,func(t *testing.T){
 			t.Parallel()
-			w := httptest.NewRecoder()
+			w := httptest.NewRecorder()
 			r := httptest.NewRequest(
 				http.MethodPost,
 				"/tasks",
-				bytes.NewRecoder(testutil.Loadfile(t,tt.readfile)),
+				bytes.NewReader(testutil.LoadFile(t,tt.reqFile)),
 
 			)
 			sut := AddTask{
 				Store: &store.TaskStore{
 					Tasks: map[entity.TaskID]*entity.Task{},
-				}
-				validator: validator.New()
+				},
+				Validator: validator.New(),
 			}
-			sut.ServerHTTP(w,r)
+			sut.ServeHTTP(w,r)
 
 			resp :=w.Result()
 			testutil.AssertResponse(t,
-			resp, tt.want.status,testutil.LoadFile())
-		}
+			resp, tt.want.status,testutil.LoadFile(t,tt.want.rspFile),
+		)
+		})
 
 
 	}
 
-	
 }

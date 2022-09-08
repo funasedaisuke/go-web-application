@@ -10,15 +10,16 @@ import (
 
 type ErrResponse struct {
 	Message string `json:"message"`
-	Details []string `json;"details,omitempty"` 
+	Details []string `json:"details,omitempty"` 
 }
 
 func RespondJSON(ctx context.Context, w http.ResponseWriter, body any ,status int){
-	w.Header().Set("content-Type","application/json; charset -utf-8")
+	w.Header().Set("Content-Type","application/json; charset=utf-8")
 	// Marshal 元帥 json encodeをかえす
 
 	bodyBytes,err:=json.Marshal(body)
 	if err != nil{
+	w.WriteHeader(http.StatusInternalServerError)
 	rsp := ErrResponse{
 		Message: http.StatusText(http.StatusInternalServerError),
 	}

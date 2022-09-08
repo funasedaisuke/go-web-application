@@ -12,11 +12,13 @@ import (
 func NewMux() http.Handler{
 	mux := chi.NewRouter()
 	mux.HandleFunc("/health",func(w http.ResponseWriter,r *http.Request){
-		w.Header().Set("Content-Type","aplication/json; charset=utf-8")
+		w.Header().Set("Content-Type","application/json; charset=utf-8")
 		_,_=w.Write([]byte(`{"STATUS":"OK"}`))
 	})
 	v := validator.New()
-	lt := &handler.AddTask{Store: store.Tasks,Validator: v}
+	at := &handler.AddTask{Store: store.Tasks,Validator: v}
+	mux.Post("/tasks",at.ServeHTTP)
+	lt := &handler.ListTask{Store: store.Tasks}
 	mux.Get("/tasks",lt.ServeHTTP)
 	return mux
 }
