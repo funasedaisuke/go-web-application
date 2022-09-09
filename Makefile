@@ -16,6 +16,8 @@ ps:
 	docker compose ps
 test:
 	go test -race -shuffle=on ./...
+migrate:
+	mysqldef -h localhost -P 33306 todo < ./_tools/mysql/schema.sql
 help:
     @grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) |\
                 awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n",$$1,$$$2"}

@@ -1,0 +1,26 @@
+
+name: golang-ci
+on:
+  pull-request:
+    paths:
+     - "**.go"
+     - ".github/workflows/golangci.yml"
+jobs:
+  golangci-lint:
+    name: golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code into the Go module directory
+    - uses: actions/checkout@v3
+    - name: golangci-lint
+    - uses: reviewdog_action-golangci-lint@v2    
+      with:
+        github_token: ${{secrets.GITHUB_TOKEN}}
+        golangci_lint_flags: "--config-./.golanci.yml ./..."
+        fail_on_error: true
+        reporter: "github-pc-review"
+
+    - uses: actions/checkout-go@v3
+    - run: go test ./... -coverprofile=coverage.out
+    - name: report coverage
+      uses:　k１LoW/octocov -action＠v0
