@@ -8,16 +8,17 @@ import (
 
 func (r *Repository) ListTasks(
 	ctx context.Context, db Queryer,
-
-)(entity.Tasks,error){
+) (entity.Tasks, error) {
 	tasks := entity.Tasks{}
-	sql := `select id ,title,status,created, modified from task;`
-	if err := db.SelectContext(ctx,&tasks,sql);err != nil{
+	sql := `SELECT
+			id, title,
+			status, created, modified
+		FROM task;`
+	if err := db.SelectContext(ctx, &tasks, sql); err != nil {
 		return nil, err
 	}
-	return tasks,nil
+	return tasks, nil
 }
-
 
 func (r *Repository) AddTasks(
 	ctx context.Context, db Execer,t *entity.Task,

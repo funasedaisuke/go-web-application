@@ -21,6 +21,9 @@ migrate:
 dry-migrate:
 	mysqldef -u todo -p todo -h localhost -P 33306 todo --dry-run < ./_tools/mysql/schema.sql
 
+generate:
+	go generate ./...
+
 help:
     @grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) |\
                 awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n",$$1,$$$2"}

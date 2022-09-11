@@ -13,6 +13,8 @@ type ErrResponse struct {
 	Details []string `json:"details,omitempty"` 
 }
 
+
+
 func RespondJSON(ctx context.Context, w http.ResponseWriter, body any ,status int){
 	w.Header().Set("Content-Type","application/json; charset=utf-8")
 	// Marshal 元帥 json encodeをかえす
