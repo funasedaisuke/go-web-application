@@ -23,3 +23,4 @@ func (a *AddTask) AddTask(ctx context.Context, title string) (*entity.Task, erro
 	}
 	return t, nil
 }
+
