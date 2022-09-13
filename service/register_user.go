@@ -24,7 +24,7 @@ func (r *RegisterUser) RegisterUser(ctx context.Context,name, password,role stri
 		Password: string(pw),
 		Role: role,
 	}
-	if err := r.Repo.RegisterUser(ctx,r.DB,u);err !0 nil{
+	if err := r.Repo.RegisterUser(ctx,r.DB,u);err != nil{
 		return nil,fmt.Errorf("failed to register:%w",err)
 	}
 	return u,nil
