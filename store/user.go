@@ -3,6 +3,7 @@ package store
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/funasedaisuke/go-web-application/entity"
 	"github.com/go-sql-driver/mysql"
@@ -17,12 +18,17 @@ func (r *Repository)RegisterUser(ctx context.Context,db Execer, u * entity.User)
 		result,err := db.ExecContext(ctx,sql,u.Name,u.Password,u.Role,u.Created,u.Modified)
 		if err != nil{
 			var mysqlErr *mysql.MySQLError
-			if errors.As(err,&mysqlErr) && mysqlErr.number == ErrCodeMySQLDuplicateEntry{
-				return fmi.Errorf("cannot create same name user: %w",ErrAlreadyEntry)
+			if errors.As(err,&mysqlErr) && mysqlErr.Number == ErrCodeMySQLDuplicateEntry{
+				return fmt.Errorf("cannot create same name user: %w",ErrAlreadyEntry)
 			}
 			return err
 		}
-		id, err := result.LastInsertID(id)
+		id, err := result.LastInsertId()
+		if err != nil{
+			return err	
+		}
+		u.ID =entity.UserID(id)
+
 		return nil
 	
 }

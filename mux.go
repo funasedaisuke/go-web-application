@@ -27,7 +27,7 @@ func NewMux(ctx context.Context,cfg *config.Config)( http.Handler,func(),error){
 	
 	r := store.Repository{Clocker: clock.RealClocker{}}
 	at := &handler.AddTask{
-		Service: &service.AddTask{DB:db, Repo: &r},
+		Service: &service.AddTask{DB:db, Repo:&r},
 		Validator: v,
 	}
 	mux.Post("/tasks",at.ServeHTTP)
@@ -37,5 +37,6 @@ func NewMux(ctx context.Context,cfg *config.Config)( http.Handler,func(),error){
 	ru :=&handler.RegisterUser{
 		Service: &service.RegisterUser{DB:db, Repo: &r},
 	Validator: v, }
+	mux.Get("/register",ru.ServeHTTP)
 	return mux,cleanup,nil
 }
