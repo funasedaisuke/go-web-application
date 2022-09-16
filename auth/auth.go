@@ -5,7 +5,7 @@ import (
 )
 
 //go:embed cert/secret.pem
-var rawPriveKey []byte
+var rawPrivateKey []byte
 
 
 //go:embed cert/public.pem
